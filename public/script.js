@@ -3,7 +3,7 @@ const socket = io("/");
 var peer = new Peer(undefined, {
     path: "/peerjs",
     host: "/",
-    port: "443",
+    port: location.protocol==='https'?443:3030,
 });
 
 const user = prompt("Enter your name");
@@ -100,6 +100,27 @@ $(function () {
             $('#mute_button').toggleClass("background_red")
             $('#mute_button').html(html)
         }
+    })
+    $("#invite_button").click(()=>{
+        const to = prompt("Enter the email address")
+        console.log(to)
+        let data = {
+            'url':window.location.href,
+            'to':to
+        }
+        $.ajax({
+            url:"/send-mail",
+            type:"POST",
+            data:JSON.stringify(data),
+            dataType:"json",
+            contentType:'application/json',
+            success:function(result){
+                alert('Invite sent')
+            },
+            error:function(result){
+                console.log(result)
+            }
+        })
     })
 
 
